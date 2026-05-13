@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexo — Empresa & Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* HERO */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .hero-text h1 {
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .hero-text h1 em {
+      font-style: normal;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .hero-text p {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 420px;
+      margin-bottom: 28px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .stat-card .number {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -1px;
+      color: var(--accent);
+    }
+    .stat-card .label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* FEED HEADER */
+    .feed-header {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .feed-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* FEED */
+    .feed-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* RECURSO INDICATOR */
+    .recurso-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .recurso-indicator.sim { color: #16a34a; }
+    .recurso-indicator.nao { color: var(--muted); }
+    .recurso-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* COMO FUNCIONA */
+    .como-funciona {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 24px;
+    }
+    .cf-inner { max-width: 1100px; margin: 0 auto; }
+    .cf-header { text-align: center; margin-bottom: 48px; }
+    .cf-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .cf-header h2 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+    }
+    .cf-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+    }
+    .cf-step {
+      flex: 1;
+      padding: 0 20px;
+    }
+    .cf-step-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .cf-step-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .cf-step-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .cf-arrow {
+      font-size: 20px;
+      color: var(--border);
+      padding-top: 8px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 720px) {
+      .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; }
+      .hero-stats { display: none; }
+      .hero-text h1 { font-size: 28px; }
+      .cf-steps { flex-direction: column; gap: 24px; }
+      .cf-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">nexo <span>/ empresa & academia</span></a>
+      <div class="nav-actions">
+        <a href="entrar.html" class="btn btn-ghost">Entrar</a>
+        <a href="publicar.html" class="btn btn-primary">Publicar demanda</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Conecte sua empresa<br>à <em>inteligência</em><br>da universidade.</h1>
+      <p>Empresas publicam demandas reais. Pesquisadores e alunos propõem soluções. Simples assim.</p>
+      <div class="hero-actions">
+        <a href="#feed" class="btn btn-primary">Ver demandas abertas</a>
+        <a href="entrar.html" class="btn btn-ghost">Sou da academia</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="number">48</div>
+        <div class="label">Demandas abertas</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">230</div>
+        <div class="label">Pesquisadores ativos</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">17</div>
+        <div class="label">Empresas parceiras</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">92%</div>
+        <div class="label">Projetos concluídos</div>
+      </div>
+    </div>
+  </section>
+
+  <div style="border-top:1px solid var(--border);max-width:1100px;margin:0 auto;"></div>
+
+  <!-- COMO FUNCIONA -->
+  <section class="como-funciona">
+    <div class="cf-inner">
+      <div class="cf-header">
+        <div class="cf-label">Como funciona</div>
+        <h2>Do problema ao parceiro em 4 passos</h2>
+      </div>
+      <div class="cf-steps">
+        <div class="cf-step">
+          <div class="cf-step-num">01</div>
+          <div class="cf-step-title">Empresa publica</div>
+          <div class="cf-step-desc">Descreva o projeto, defina área temática, escopo, prazo e se há recurso financeiro disponível.</div>
+        </div>
+        <div class="cf-arrow">→</div>
+        <div class="cf-step">
+          <div class="cf-step-num">02</div>
+          <div class="cf-step-title">Academia se candida</div>
+          <div class="cf-step-desc">Pesquisadores e alunos encontram demandas compatíveis com sua área e enviam uma proposta.</div>
+        </div>
+        <div class="cf-arrow">→</div>
+        <div class="cf-step">
+          <div class="cf-step-num">03</div>
+          <div class="cf-step-title">Empresa seleciona</div>
+          <div class="cf-step-desc">A empresa avalia as candidaturas, acessa perfis e propostas, e escolhe o parceiro ideal.</div>
+        </div>
+        <div class="cf-arrow">→</div>
+        <div class="cf-step">
+          <div class="cf-step-num">04</div>
+          <div class="cf-step-title">Projeto acontece</div>
+          <div class="cf-step-desc">Empresa e academia formalizam e executam. Acompanhe o andamento pelo painel.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="border-top:1px solid var(--border);max-width:1100px;margin:0 auto;"></div>
+
+  <!-- FEED HEADER -->
+  <div class="feed-header" id="feed">
+    <h2>Demandas abertas</h2>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filtrar(this, 'todos')">Todos</button>
+      <button class="filter-btn" onclick="filtrar(this, 'pesquisa')">Pesquisa</button>
+      <button class="filter-btn" onclick="filtrar(this, 'tcc')">TCC</button>
+      <button class="filter-btn" onclick="filtrar(this, 'estagio')">Estágio</button>
+      <button class="filter-btn" onclick="filtrar(this, 'recurso')">Com recurso financeiro</button>
+    </div>
+  </div>
+
+  <!-- FEED GRID -->
+  <div class="feed-wrap">
+    <div class="feed" id="feed-grid">
+
+      <a href="demanda.html" class="card" data-tipo="pesquisa" data-recurso="sim">
+        <div class="card-top">
+          <div class="company-badge">
+            <div class="company-logo">PB</div>
+            <span class="company-name">Petrobras</span>
+          </div>
+          <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+        </div>
+        <div class="card-title">Otimização de algoritmos preditivos para manutenção de equipamentos industriais</div>
+        <div class="card-desc">Modelos de machine learning para prever falhas em compressores com base em séries temporais de sensores IoT instalados em campo. Dados históricos fornecidos.</div>
+        <div class="tag-list">
+          <span class="tag">Machine Learning</span>
+          <span class="tag">IoT</span>
+          <span class="tag">Python</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">12 meses · Remoto</span>
+          <span class="recurso-indicator sim"><span class="recurso-dot"></span>R$ 50k–120k</span>
+        </div>
+      </a>
+
+      <a href="demanda.html" class="card" data-tipo="tcc" data-recurso="nao">
+        <div class="card-top">
+          <div class="company-badge">
+            <div class="company-logo" style="background:#2d6a4f">EM</div>
+            <span class="company-name">Embrapa</span>
+          </div>
+          <span class="tipo-tag tipo-tcc">TCC</span>
+        </div>
+        <div class="card-title">Análise de dados de solo para recomendação de culturas em pequenas propriedades</div>
+        <div class="card-desc">Dados reais de 200 propriedades fornecidos. Sistema de recomendação para agricultores familiares. Área: agronomia, ciência de dados ou sistemas de informação.</div>
+        <div class="tag-list">
+          <span class="tag">Agronomia</span>
+          <span class="tag">Dados</span>
+          <span class="tag">Impacto Social</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">6 meses · Híbrido</span>
+          <span class="recurso-indicator nao"><span class="recurso-dot"></span>Sem recurso direto</span>
+        </div>
+      </a>
+
+      <a href="demanda.html" class="card" data-tipo="estagio" data-recurso="sim">
+        <div class="card-top">
+          <div class="company-badge">
+            <div class="company-logo" style="background:#7c3aed">NU</div>
+            <span class="company-name">Nubank</span>
+          </div>
+          <span class="tipo-tag tipo-estagio">Estágio</span>
+        </div>
+        <div class="card-title">Desenvolvimento de dashboard de monitoramento para serviços de crédito</div>
+        <div class="card-desc">Painel interno com visualizações em tempo real. Stack: React, TypeScript, Grafana. Engenharia de software ou computação.</div>
+        <div class="tag-list">
+          <span class="tag">React</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Grafana</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">12 meses · SP/Remoto</span>
+          <span class="recurso-indicator sim"><span class="recurso-dot"></span>Bolsa inclusa</span>
+        </div>
+      </a>
+
+      <a href="demanda.html" class="card" data-tipo="pesquisa" data-recurso="sim">
+        <div class="card-top">
+          <div class="company-badge">
+            <div class="company-logo" style="background:#b45309">VL</div>
+            <span class="company-name">Vale</span>
+          </div>
+          <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+        </div>
+        <div class="card-title">Estudo de impacto ambiental e modelos de recuperação de áreas degradadas por mineração</div>
+        <div class="card-desc">Protocolo de recuperação baseado em bioindicadores. Financiamento disponível. Publicação em co-autoria incentivada. Laboratório de engenharia ambiental.</div>
+        <div class="tag-list">
+          <span class="tag">Ambiental</span>
+          <span class="tag">Biologia</span>
+          <span class="tag">Engenharia</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">24 meses · Presencial (MG)</span>
+          <span class="recurso-indicator sim"><span class="recurso-dot"></span>R$ 80k–200k</span>
+        </div>
+      </a>
+
+      <a href="demanda.html" class="card" data-tipo="tcc" data-recurso="nao">
+        <div class="card-top">
+          <div class="company-badge">
+            <div class="company-logo" style="background:#0369a1">TO</div>
+            <span class="company-name">Totvs</span>
+          </div>
+          <span class="tipo-tag tipo-tcc">TCC</span>
+        </div>
+        <div class="card-title">Prototipação de interface conversacional para ERP com processamento de linguagem natural</div>
+        <div class="card-desc">Chatbot integrado ao ERP Totvs. Acesso à API de homologação fornecido. Computação ou design de interação.</div>
+        <div class="tag-list">
+          <span class="tag">NLP</span>
+          <span class="tag">UX</span>
+          <span class="tag">ERP</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">8 meses · Remoto</span>
+          <span class="recurso-indicator nao"><span class="recurso-dot"></span>Acesso a dados / API</span>
+        </div>
+      </a>
+
+      <a href="demanda.html" class="card" data-tipo="estagio" data-recurso="sim">
+        <div class="card-top">
+          <div class="company-badge">
+            <div class="company-logo" style="background:#be123c">AM</div>
+            <span class="company-name">Ambev</span>
+          </div>
+          <span class="tipo-tag tipo-estagio">Estágio</span>
+        </div>
+        <div class="card-title">Automação de processos de controle de qualidade em linha de produção</div>
+        <div class="card-desc">Automação com PLCs e visão computacional em planta industrial. Engenharia mecatrônica, elétrica ou de produção. Possibilidade de efetivação.</div>
+        <div class="tag-list">
+          <span class="tag">Automação</span>
+          <span class="tag">Visão Computacional</span>
+          <span class="tag">PLC</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">6 meses · Presencial (SP)</span>
+          <span class="recurso-indicator sim"><span class="recurso-dot"></span>Bolsa competitiva</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    nexo &mdash; conectando empresa e academia &mdash; 2025
+  </footer>
+
+  <script>
+    function filtrar(btn, tipo) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        let show = false;
+        if (tipo === 'todos') show = true;
+        else if (tipo === 'recurso') show = card.dataset.recurso === 'sim';
+        else show = card.dataset.tipo === tipo;
+        card.style.display = show ? 'flex' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>

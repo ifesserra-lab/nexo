@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel — Nexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .app-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* SIDEBAR NAV */
+    .side-nav {
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      background: var(--surface);
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+    .side-nav-section {
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+    .side-nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+    }
+    .nav-item:hover { background: var(--bg); color: var(--text); }
+    .nav-item.active { background: var(--bg); color: var(--text); font-weight: 600; }
+    .nav-item .icon { font-size: 15px; width: 18px; text-align: center; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+
+    .nav-company {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-company .name { font-size: 14px; font-weight: 600; }
+    .nav-company .role { font-size: 12px; color: var(--muted); }
+
+    /* MAIN CONTENT */
+    .main-content { padding: 32px 36px 80px; background: var(--bg); }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .panel-header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .stat-card .num { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; color: var(--accent); }
+    .stat-card .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .stat-card .delta {
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 6px;
+    }
+    .delta-up { color: #16a34a; }
+    .delta-down { color: #dc2626; }
+
+    /* SECTION */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-header h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+    .section-block { margin-bottom: 36px; }
+
+    /* DEMAND TABLE */
+    .demand-table {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 80px 90px 90px 120px;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .table-row:last-child { border-bottom: none; }
+    .table-header {
+      background: var(--bg);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+    }
+    .table-title { font-weight: 500; font-size: 14px; }
+    .table-actions { display: flex; gap: 6px; }
+    .icon-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg); }
+
+    /* CANDIDATOS PANEL */
+    .candidatos-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .candidato-row {
+      display: grid;
+      grid-template-columns: 1fr 160px 120px 80px;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .candidato-row:last-child { border-bottom: none; }
+    .candidato-info { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .candidato-name { font-weight: 500; font-size: 14px; }
+    .candidato-sub { font-size: 12px; color: var(--muted); }
+
+    /* DEMAND SELECTOR */
+    .demand-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .demand-chip {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .demand-chip:hover,
+    .demand-chip.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* PANEL VIEWS */
+    .panel-view { display: none; }
+    .panel-view.active { display: block; }
+
+    @media (max-width: 900px) {
+      .app-layout { grid-template-columns: 1fr; }
+      .side-nav { display: none; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .table-row { grid-template-columns: 1fr auto; }
+      .table-row > *:not(:first-child):not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">nexo <span>/ empresa & academia</span></a>
+      <div class="nav-actions">
+        <a href="empresa.html" class="btn btn-ghost">Ver perfil público</a>
+        <a href="publicar.html" class="btn btn-primary">+ Nova demanda</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="app-layout">
+
+    <!-- SIDEBAR NAV -->
+    <nav class="side-nav">
+      <div class="nav-company">
+        <div class="company-logo" style="width:32px;height:32px;font-size:12px;border-radius:6px;">PB</div>
+        <div>
+          <div class="name">Petrobras</div>
+          <div class="role">Administrador</div>
+        </div>
+      </div>
+
+      <div class="side-nav-section">
+        <div class="side-nav-label">Principal</div>
+        <button class="nav-item active" onclick="showView('visao-geral', this)">
+          <span class="icon">📊</span> Visão geral
+        </button>
+        <button class="nav-item" onclick="showView('demandas', this)">
+          <span class="icon">📋</span> Minhas demandas
+        </button>
+        <button class="nav-item" onclick="showView('candidatos', this)">
+          <span class="icon">👥</span> Candidatos
+          <span class="nav-badge">12</span>
+        </button>
+      </div>
+
+      <div class="side-nav-section" style="margin-top:16px;">
+        <div class="side-nav-label">Conta</div>
+        <a class="nav-item" href="empresa.html">
+          <span class="icon">🏢</span> Perfil público
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">⚙️</span> Configurações
+        </a>
+        <a class="nav-item" href="entrar.html">
+          <span class="icon">↩</span> Sair
+        </a>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- VIEW: VISÃO GERAL -->
+      <div class="panel-view active" id="view-visao-geral">
+        <div class="panel-header">
+          <h1>Visão geral</h1>
+          <span style="font-size:13px;color:var(--muted);">13 mai 2026</span>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="num">8</div>
+            <div class="lbl">Demandas abertas</div>
+            <div class="delta delta-up">↑ 2 este mês</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">12</div>
+            <div class="lbl">Novos candidatos</div>
+            <div class="delta delta-up">↑ 5 esta semana</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">3</div>
+            <div class="lbl">Projetos em andamento</div>
+            <div class="delta" style="color:var(--muted);">Sem alteração</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">94%</div>
+            <div class="lbl">Taxa de conclusão</div>
+            <div class="delta delta-up">↑ 2% vs. ano anterior</div>
+          </div>
+        </div>
+
+        <!-- CANDIDATOS RECENTES -->
+        <div class="section-block">
+          <div class="section-header">
+            <h2>Candidatos novos para revisar</h2>
+            <button class="btn btn-ghost" style="font-size:13px;" onclick="showView('candidatos', document.querySelector('.nav-item:nth-child(3)'))">Ver todos</button>
+          </div>
+          <div class="candidatos-panel">
+            <div class="candidato-row table-header">
+              <div>Candidato</div>
+              <div>Demanda</div>
+              <div>Enviado</div>
+              <div>Ação</div>
+            </div>
+            <div class="candidato-row">
+              <div class="candidato-info">
+                <div class="avatar">MS</div>
+                <div>
+                  <div class="candidato-name">Maria Silva</div>
+                  <div class="candidato-sub">Doutoranda · USP</div>
+                </div>
+              </div>
+              <div style="font-size:13px;color:var(--muted);">Manutenção preditiva</div>
+              <div style="font-size:12px;color:var(--muted);">há 2h</div>
+              <div class="table-actions">
+                <button class="icon-btn" title="Ver proposta">👁</button>
+                <button class="icon-btn" title="Aceitar" style="color:#16a34a;">✓</button>
+                <button class="icon-btn" title="Recusar" style="color:#dc2626;">✕</button>
+              </div>
+            </div>
+            <div class="candidato-row">
+              <div class="candidato-info">
+                <div class="avatar" style="background:#4338ca">RC</div>
+                <div>
+                  <div class="candidato-name">Rafael Costa</div>
+                  <div class="candidato-sub">Prof. Pesquisador · UNICAMP</div>
+                </div>
+              </div>
+              <div style="font-size:13px;color:var(--muted);">Dispersão de poluentes</div>
+              <div style="font-size:12px;color:var(--muted);">há 5h</div>
+              <div class="table-actions">
+                <button class="icon-btn" title="Ver proposta">👁</button>
+                <button class="icon-btn" title="Aceitar" style="color:#16a34a;">✓</button>
+                <button class="icon-btn" title="Recusar" style="color:#dc2626;">✕</button>
+              </div>
+            </div>
+            <div class="candidato-row">
+              <div class="candidato-info">
+                <div class="avatar" style="background:#2d6a4f">JF</div>
+                <div>
+                  <div class="candidato-name">João Ferreira</div>
+                  <div class="candidato-sub">Mestrando · UFBA</div>
+                </div>
+              </div>
+              <div style="font-size:13px;color:var(--muted);">Manutenção preditiva</div>
+              <div style="font-size:12px;color:var(--muted);">ontem</div>
+              <div class="table-actions">
+                <button class="icon-btn" title="Ver proposta">👁</button>
+                <button class="icon-btn" title="Aceitar" style="color:#16a34a;">✓</button>
+                <button class="icon-btn" title="Recusar" style="color:#dc2626;">✕</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMANDAS RECENTES -->
+        <div class="section-block">
+          <div class="section-header">
+            <h2>Demandas abertas recentes</h2>
+            <button class="btn btn-ghost" style="font-size:13px;" onclick="showView('demandas', document.querySelector('.nav-item:nth-child(2)'))">Ver todas</button>
+          </div>
+          <div class="demand-table">
+            <div class="table-row table-header">
+              <div>Demanda</div>
+              <div>Tipo</div>
+              <div>Candidatos</div>
+              <div>Status</div>
+              <div>Prazo cand.</div>
+              <div>Ações</div>
+            </div>
+            <div class="table-row">
+              <div class="table-title">Otimização de algoritmos preditivos...</div>
+              <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+              <div>7</div>
+              <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+              <div style="color:var(--muted);">30 jun</div>
+              <div class="table-actions">
+                <button class="icon-btn" title="Ver">👁</button>
+                <button class="icon-btn" title="Editar">✏️</button>
+                <button class="icon-btn" title="Fechar">🔒</button>
+              </div>
+            </div>
+            <div class="table-row">
+              <div class="table-title">Modelagem de dispersão de poluentes...</div>
+              <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+              <div>4</div>
+              <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+              <div style="color:var(--muted);">15 jul</div>
+              <div class="table-actions">
+                <button class="icon-btn" title="Ver">👁</button>
+                <button class="icon-btn" title="Editar">✏️</button>
+                <button class="icon-btn" title="Fechar">🔒</button>
+              </div>
+            </div>
+            <div class="table-row">
+              <div class="table-title">Estágio em análise de dados geoespaciais...</div>
+              <span class="tipo-tag tipo-estagio">Estágio</span>
+              <div>11</div>
+              <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+              <div style="color:var(--muted);">01 jun</div>
+              <div class="table-actions">
+                <button class="icon-btn" title="Ver">👁</button>
+                <button class="icon-btn" title="Editar">✏️</button>
+                <button class="icon-btn" title="Fechar">🔒</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: DEMANDAS -->
+      <div class="panel-view" id="view-demandas">
+        <div class="panel-header">
+          <h1>Minhas demandas</h1>
+          <a href="publicar.html" class="btn btn-primary">+ Nova demanda</a>
+        </div>
+
+        <div class="demand-table">
+          <div class="table-row table-header">
+            <div>Demanda</div>
+            <div>Tipo</div>
+            <div>Candidatos</div>
+            <div>Status</div>
+            <div>Prazo cand.</div>
+            <div>Ações</div>
+          </div>
+          <div class="table-row">
+            <div class="table-title">Otimização de algoritmos preditivos para manutenção de equipamentos industriais</div>
+            <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+            <div>7</div>
+            <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+            <div style="color:var(--muted);">30 jun</div>
+            <div class="table-actions">
+              <button class="icon-btn" onclick="location.href='demanda.html'">👁</button>
+              <button class="icon-btn">✏️</button>
+              <button class="icon-btn">🔒</button>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-title">Modelagem de dispersão de poluentes atmosféricos em áreas costeiras</div>
+            <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+            <div>4</div>
+            <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+            <div style="color:var(--muted);">15 jul</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn">✏️</button>
+              <button class="icon-btn">🔒</button>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-title">Sistema embarcado para monitoramento de válvulas submarinas</div>
+            <span class="tipo-tag tipo-tcc">TCC</span>
+            <div>2</div>
+            <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+            <div style="color:var(--muted);">20 jun</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn">✏️</button>
+              <button class="icon-btn">🔒</button>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-title">Estágio em análise de dados geoespaciais para exploração de reservas</div>
+            <span class="tipo-tag tipo-estagio">Estágio</span>
+            <div>11</div>
+            <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+            <div style="color:var(--muted);">01 jun</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn">✏️</button>
+              <button class="icon-btn">🔒</button>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-title">Análise de resistência de materiais compósitos para dutos de alta pressão</div>
+            <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+            <div>—</div>
+            <span class="status-badge status-andamento"><span class="status-dot"></span>Em andamento</span>
+            <div style="color:var(--muted);">—</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn">📋</button>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-title">Classificação automática de imagens sísmicas com deep learning</div>
+            <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+            <div>—</div>
+            <span class="status-badge status-andamento"><span class="status-dot"></span>Em andamento</span>
+            <div style="color:var(--muted);">—</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn">📋</button>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-title">Sistema de detecção de vazamentos em gasodutos via ML</div>
+            <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+            <div>—</div>
+            <span class="status-badge status-fechada"><span class="status-dot"></span>Concluída</span>
+            <div style="color:var(--muted);">—</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: CANDIDATOS -->
+      <div class="panel-view" id="view-candidatos">
+        <div class="panel-header">
+          <h1>Candidatos</h1>
+        </div>
+
+        <div class="demand-selector">
+          <button class="demand-chip active" onclick="filterChip(this)">Todas as demandas (12)</button>
+          <button class="demand-chip" onclick="filterChip(this)">Manutenção preditiva (7)</button>
+          <button class="demand-chip" onclick="filterChip(this)">Dispersão poluentes (4)</button>
+          <button class="demand-chip" onclick="filterChip(this)">Válvulas submarinas (2)</button>
+          <button class="demand-chip" onclick="filterChip(this)">Dados geoespaciais (11)</button>
+        </div>
+
+        <div class="candidatos-panel">
+          <div class="candidato-row table-header">
+            <div>Candidato</div>
+            <div>Demanda</div>
+            <div>Enviado</div>
+            <div>Ação</div>
+          </div>
+
+          <div class="candidato-row">
+            <div class="candidato-info">
+              <div class="avatar">MS</div>
+              <div>
+                <div class="candidato-name">Maria Silva</div>
+                <div class="candidato-sub">Doutoranda em Computação · USP · <a href="academia.html" style="color:var(--accent);text-decoration:none;">ver perfil</a></div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--muted);">Manutenção preditiva</div>
+            <div style="font-size:12px;color:var(--muted);">08 mai 2026</div>
+            <div class="table-actions">
+              <button class="icon-btn" title="Ver proposta">👁</button>
+              <button class="icon-btn" title="Aceitar" style="color:#16a34a;" onclick="this.closest('.candidato-row').querySelector('.status-badge') && null">✓</button>
+              <button class="icon-btn" title="Recusar" style="color:#dc2626;">✕</button>
+            </div>
+          </div>
+
+          <div class="candidato-row">
+            <div class="candidato-info">
+              <div class="avatar" style="background:#4338ca">RC</div>
+              <div>
+                <div class="candidato-name">Rafael Costa</div>
+                <div class="candidato-sub">Prof. Pesquisador · UNICAMP · <a href="#" style="color:var(--accent);text-decoration:none;">ver perfil</a></div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--muted);">Dispersão poluentes</div>
+            <div style="font-size:12px;color:var(--muted);">06 mai 2026</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn" style="color:#16a34a;">✓</button>
+              <button class="icon-btn" style="color:#dc2626;">✕</button>
+            </div>
+          </div>
+
+          <div class="candidato-row">
+            <div class="candidato-info">
+              <div class="avatar" style="background:#2d6a4f">JF</div>
+              <div>
+                <div class="candidato-name">João Ferreira</div>
+                <div class="candidato-sub">Mestrando em Eng. Mecânica · UFBA · <a href="#" style="color:var(--accent);text-decoration:none;">ver perfil</a></div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--muted);">Manutenção preditiva</div>
+            <div style="font-size:12px;color:var(--muted);">05 mai 2026</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn" style="color:#16a34a;">✓</button>
+              <button class="icon-btn" style="color:#dc2626;">✕</button>
+            </div>
+          </div>
+
+          <div class="candidato-row">
+            <div class="candidato-info">
+              <div class="avatar" style="background:#be123c">AL</div>
+              <div>
+                <div class="candidato-name">Ana Lima</div>
+                <div class="candidato-sub">Doutoranda em Ambiental · UFMG · <a href="#" style="color:var(--accent);text-decoration:none;">ver perfil</a></div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--muted);">Válvulas submarinas</div>
+            <div style="font-size:12px;color:var(--muted);">04 mai 2026</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn" style="color:#16a34a;">✓</button>
+              <button class="icon-btn" style="color:#dc2626;">✕</button>
+            </div>
+          </div>
+
+          <div class="candidato-row">
+            <div class="candidato-info">
+              <div class="avatar" style="background:#7c3aed">PO</div>
+              <div>
+                <div class="candidato-name">Pedro Oliveira</div>
+                <div class="candidato-sub">Pós-doc em Geofísica · UFRJ · <a href="#" style="color:var(--accent);text-decoration:none;">ver perfil</a></div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--muted);">Dados geoespaciais</div>
+            <div style="font-size:12px;color:var(--muted);">03 mai 2026</div>
+            <div class="table-actions">
+              <button class="icon-btn">👁</button>
+              <button class="icon-btn" style="color:#16a34a;">✓</button>
+              <button class="icon-btn" style="color:#dc2626;">✕</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function showView(id, btn) {
+      document.querySelectorAll('.panel-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById('view-' + id).classList.add('active');
+      if (btn) btn.classList.add('active');
+    }
+
+    function filterChip(btn) {
+      document.querySelectorAll('.demand-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

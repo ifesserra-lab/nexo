@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu painel — Nexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .app-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    .side-nav {
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      background: var(--surface);
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+    .side-nav-section { padding: 0 12px; margin-bottom: 8px; }
+    .side-nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+    }
+    .nav-item:hover { background: var(--bg); color: var(--text); }
+    .nav-item.active { background: var(--bg); color: var(--text); font-weight: 600; }
+    .nav-item .icon { font-size: 15px; width: 18px; text-align: center; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+
+    .nav-user {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-user .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .nav-user .name { font-size: 14px; font-weight: 600; }
+    .nav-user .role { font-size: 12px; color: var(--muted); }
+
+    .main-content { padding: 32px 36px 80px; background: var(--bg); }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .panel-header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .stat-card .num { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; color: var(--accent); }
+    .stat-card .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .section-block { margin-bottom: 36px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-header h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+
+    /* CANDIDATURA CARDS */
+    .candidatura-list { display: flex; flex-direction: column; gap: 10px; }
+    .candidatura-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s;
+    }
+    .candidatura-card:hover { border-color: #ccc; }
+    .candidatura-company {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .candidatura-title { font-size: 15px; font-weight: 500; letter-spacing: -0.2px; margin-bottom: 6px; }
+    .candidatura-meta { font-size: 12px; color: var(--muted); display: flex; gap: 14px; }
+
+    /* PROJETOS */
+    .projeto-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .projeto-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .projeto-title { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; margin-bottom: 4px; }
+    .projeto-sub { font-size: 13px; color: var(--muted); }
+    .progress-bar-wrap {
+      margin-top: 16px;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+    }
+    .projeto-milestones {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .milestone {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .milestone.done { color: #16a34a; }
+    .milestone .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .milestone.done .dot { background: #16a34a; }
+    .milestone.current .dot { background: var(--accent); }
+    .milestone.current { color: var(--text); font-weight: 500; }
+
+    /* FEED RECOMENDADO */
+    .recomendado-list { display: flex; flex-direction: column; gap: 8px; }
+    .recomendado-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s;
+    }
+    .recomendado-item:hover { border-color: #ccc; }
+    .recomendado-left { flex: 1; min-width: 0; }
+    .recomendado-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .recomendado-meta { font-size: 12px; color: var(--muted); }
+
+    /* PANEL VIEWS */
+    .panel-view { display: none; }
+    .panel-view.active { display: block; }
+
+    @media (max-width: 900px) {
+      .app-layout { grid-template-columns: 1fr; }
+      .side-nav { display: none; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">nexo <span>/ empresa & academia</span></a>
+      <div class="nav-actions">
+        <a href="academia.html" class="btn btn-ghost">Ver perfil público</a>
+        <a href="index.html" class="btn btn-primary">Explorar demandas</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <nav class="side-nav">
+      <div class="nav-user">
+        <div class="avatar">MS</div>
+        <div>
+          <div class="name">Maria Silva</div>
+          <div class="role">Doutoranda · USP</div>
+        </div>
+      </div>
+
+      <div class="side-nav-section">
+        <div class="side-nav-label">Principal</div>
+        <button class="nav-item active" onclick="showView('visao-geral', this)">
+          <span class="icon">📊</span> Visão geral
+        </button>
+        <button class="nav-item" onclick="showView('candidaturas', this)">
+          <span class="icon">📨</span> Candidaturas
+          <span class="nav-badge">4</span>
+        </button>
+        <button class="nav-item" onclick="showView('projetos', this)">
+          <span class="icon">🔬</span> Projetos ativos
+        </button>
+        <button class="nav-item" onclick="showView('recomendados', this)">
+          <span class="icon">✨</span> Recomendados
+        </button>
+      </div>
+
+      <div class="side-nav-section" style="margin-top:16px;">
+        <div class="side-nav-label">Conta</div>
+        <a class="nav-item" href="academia.html">
+          <span class="icon">👤</span> Meu perfil
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">⚙️</span> Configurações
+        </a>
+        <a class="nav-item" href="entrar.html">
+          <span class="icon">↩</span> Sair
+        </a>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- VIEW: VISÃO GERAL -->
+      <div class="panel-view active" id="view-visao-geral">
+        <div class="panel-header">
+          <h1>Olá, Maria</h1>
+          <span style="font-size:13px;color:var(--muted);">13 mai 2026</span>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="num">4</div>
+            <div class="lbl">Candidaturas enviadas</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">1</div>
+            <div class="lbl">Aceita</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">2</div>
+            <div class="lbl">Em análise</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">8</div>
+            <div class="lbl">Demandas novas na sua área</div>
+          </div>
+        </div>
+
+        <!-- ALERTA -->
+        <div style="background:#EEF2FF;border:1px solid #c7d2fe;border-radius:var(--radius);padding:14px 18px;margin-bottom:28px;font-size:14px;color:#4338ca;display:flex;align-items:center;gap:10px;">
+          <span>🎉</span>
+          <span><strong>Totvs aceitou sua candidatura!</strong> Você foi selecionada para o projeto de interface conversacional para ERP. <a href="#" style="color:#4338ca;font-weight:600;">Ver detalhes →</a></span>
+        </div>
+
+        <!-- PROJETO ATIVO PREVIEW -->
+        <div class="section-block">
+          <div class="section-header">
+            <h2>Projeto em andamento</h2>
+            <button class="btn btn-ghost" style="font-size:13px;" onclick="showView('projetos', null)">Ver detalhes</button>
+          </div>
+          <div class="projeto-card">
+            <div class="projeto-header">
+              <div>
+                <div class="projeto-title">Interface conversacional para ERP — Totvs</div>
+                <div class="projeto-sub">TCC · 8 meses · Iniciado 10 mai 2026</div>
+              </div>
+              <span class="status-badge status-andamento"><span class="status-dot"></span>Em andamento</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-label">
+                <span>Progresso geral</span>
+                <span>12%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:12%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CANDIDATURAS RECENTES -->
+        <div class="section-block">
+          <div class="section-header">
+            <h2>Candidaturas recentes</h2>
+            <button class="btn btn-ghost" style="font-size:13px;" onclick="showView('candidaturas', null)">Ver todas</button>
+          </div>
+          <div class="candidatura-list">
+            <a href="demanda.html" class="candidatura-card">
+              <div>
+                <div class="candidatura-company">
+                  <div class="company-logo" style="width:20px;height:20px;font-size:8px;border-radius:4px;">PB</div>
+                  <span style="font-size:12px;color:var(--muted);font-weight:500;">Petrobras</span>
+                </div>
+                <div class="candidatura-title">Otimização de algoritmos preditivos para manutenção</div>
+                <div class="candidatura-meta"><span>Pesquisa · 12 meses</span><span>Enviada: 08 mai 2026</span></div>
+              </div>
+              <span class="status-badge" style="background:#FFF7ED;color:#c2410c;white-space:nowrap;"><span class="status-dot"></span>Em análise</span>
+            </a>
+            <a href="demanda.html" class="candidatura-card">
+              <div>
+                <div class="candidatura-company">
+                  <div class="company-logo" style="width:20px;height:20px;font-size:8px;border-radius:4px;background:#b45309;">VL</div>
+                  <span style="font-size:12px;color:var(--muted);font-weight:500;">Vale</span>
+                </div>
+                <div class="candidatura-title">Modelos de recuperação de áreas degradadas por mineração</div>
+                <div class="candidatura-meta"><span>Pesquisa · 24 meses</span><span>Enviada: 15 abr 2026</span></div>
+              </div>
+              <span class="status-badge" style="background:#FFF7ED;color:#c2410c;white-space:nowrap;"><span class="status-dot"></span>Em análise</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: CANDIDATURAS -->
+      <div class="panel-view" id="view-candidaturas">
+        <div class="panel-header">
+          <h1>Candidaturas</h1>
+          <a href="index.html" class="btn btn-primary">Explorar demandas</a>
+        </div>
+
+        <div class="candidatura-list">
+          <a href="demanda.html" class="candidatura-card">
+            <div>
+              <div class="candidatura-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;">PB</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Petrobras</span>
+              </div>
+              <div class="candidatura-title">Otimização de algoritmos preditivos para manutenção de equipamentos industriais</div>
+              <div class="candidatura-meta"><span>Pesquisa · 12 meses · Remoto</span><span>Enviada: 08 mai 2026</span><span>Recurso: R$ 50k–120k</span></div>
+            </div>
+            <span class="status-badge" style="background:#FFF7ED;color:#c2410c;white-space:nowrap;"><span class="status-dot"></span>Em análise</span>
+          </a>
+
+          <a href="demanda.html" class="candidatura-card" style="border-color:#bbf7d0;">
+            <div>
+              <div class="candidatura-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;background:#0369a1;">TO</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Totvs</span>
+              </div>
+              <div class="candidatura-title">Prototipação de interface conversacional para ERP com processamento de linguagem natural</div>
+              <div class="candidatura-meta"><span>TCC · 8 meses · Remoto</span><span>Enviada: 02 mai 2026</span></div>
+            </div>
+            <span class="status-badge status-aberta" style="white-space:nowrap;"><span class="status-dot"></span>Aceita ✓</span>
+          </a>
+
+          <a href="demanda.html" class="candidatura-card">
+            <div>
+              <div class="candidatura-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;background:#7c3aed;">NU</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Nubank</span>
+              </div>
+              <div class="candidatura-title">Desenvolvimento de dashboard de monitoramento para serviços de crédito</div>
+              <div class="candidatura-meta"><span>Estágio · 12 meses · SP/Remoto</span><span>Enviada: 28 abr 2026</span></div>
+            </div>
+            <span class="status-badge status-fechada" style="white-space:nowrap;"><span class="status-dot"></span>Não selecionada</span>
+          </a>
+
+          <a href="demanda.html" class="candidatura-card">
+            <div>
+              <div class="candidatura-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;background:#b45309;">VL</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Vale</span>
+              </div>
+              <div class="candidatura-title">Estudo de impacto ambiental e modelos de recuperação de áreas degradadas</div>
+              <div class="candidatura-meta"><span>Pesquisa · 24 meses · Presencial (MG)</span><span>Enviada: 15 abr 2026</span><span>Recurso: R$ 80k–200k</span></div>
+            </div>
+            <span class="status-badge" style="background:#FFF7ED;color:#c2410c;white-space:nowrap;"><span class="status-dot"></span>Em análise</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- VIEW: PROJETOS -->
+      <div class="panel-view" id="view-projetos">
+        <div class="panel-header">
+          <h1>Projetos ativos</h1>
+        </div>
+
+        <div class="projeto-card">
+          <div class="projeto-header">
+            <div>
+              <div class="projeto-title">Prototipação de interface conversacional para ERP com NLP</div>
+              <div class="projeto-sub">Totvs · TCC · 8 meses · Iniciado 10 mai 2026 · Previsão jan 2027</div>
+            </div>
+            <span class="status-badge status-andamento"><span class="status-dot"></span>Em andamento</span>
+          </div>
+
+          <div style="display:flex;gap:24px;font-size:13px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap;">
+            <span>📍 Remoto</span>
+            <span>💰 Acesso a dados / API</span>
+            <span>👤 Contato: eng.integracao@totvs.com.br</span>
+          </div>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-label">
+              <span>Progresso</span>
+              <span style="font-weight:600;">12% · Mês 1 de 8</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:12%;"></div>
+            </div>
+          </div>
+
+          <div class="projeto-milestones">
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Marcos do projeto</div>
+            <div class="milestone done">
+              <div class="dot"></div>
+              Kickoff e alinhamento de escopo — 10 mai 2026
+            </div>
+            <div class="milestone done">
+              <div class="dot"></div>
+              Acesso à API de homologação configurado — 12 mai 2026
+            </div>
+            <div class="milestone current">
+              <div class="dot"></div>
+              Levantamento de requisitos e arquitetura — até 31 mai 2026
+            </div>
+            <div class="milestone">
+              <div class="dot"></div>
+              Protótipo v1 — até 30 jun 2026
+            </div>
+            <div class="milestone">
+              <div class="dot"></div>
+              Relatório intermediário — 10 ago 2026
+            </div>
+            <div class="milestone">
+              <div class="dot"></div>
+              Entrega final e defesa — jan 2027
+            </div>
+          </div>
+
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:10px;">
+            <a href="#" class="btn btn-ghost" style="font-size:13px;">Enviar relatório</a>
+            <a href="#" class="btn btn-ghost" style="font-size:13px;">Contatar empresa</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: RECOMENDADOS -->
+      <div class="panel-view" id="view-recomendados">
+        <div class="panel-header">
+          <h1>Recomendados para você</h1>
+        </div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">Baseado nas suas áreas: Machine Learning, IoT, Séries Temporais.</p>
+
+        <div class="recomendado-list">
+          <a href="demanda.html" class="recomendado-item">
+            <div class="recomendado-left">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <div class="company-logo" style="width:20px;height:20px;font-size:8px;border-radius:4px;background:#2d6a4f;">EM</div>
+                <span style="font-size:12px;color:var(--muted);">Embrapa</span>
+              </div>
+              <div class="recomendado-title">Sistema de monitoramento remoto de lavouras com sensores IoT e ML</div>
+              <div class="recomendado-meta">Pesquisa · 18 meses · Remoto · R$ 60k–100k</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+              <span style="font-size:11px;color:#4338ca;font-weight:600;">95% compatível</span>
+            </div>
+          </a>
+
+          <a href="demanda.html" class="recomendado-item">
+            <div class="recomendado-left">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <div class="company-logo" style="width:20px;height:20px;font-size:8px;border-radius:4px;background:#0369a1;">SC</div>
+                <span style="font-size:12px;color:var(--muted);">Siemens</span>
+              </div>
+              <div class="recomendado-title">Detecção de anomalias em redes elétricas industriais com deep learning</div>
+              <div class="recomendado-meta">Pesquisa · 24 meses · Híbrido (SP) · R$ 120k+</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+              <span style="font-size:11px;color:#4338ca;font-weight:600;">91% compatível</span>
+            </div>
+          </a>
+
+          <a href="demanda.html" class="recomendado-item">
+            <div class="recomendado-left">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <div class="company-logo" style="width:20px;height:20px;font-size:8px;border-radius:4px;background:#be123c;">WE</div>
+                <span style="font-size:12px;color:var(--muted);">WEG</span>
+              </div>
+              <div class="recomendado-title">Previsão de demanda energética em indústrias com series temporais multivariadas</div>
+              <div class="recomendado-meta">Dissertação · 12 meses · Remoto · R$ 30k–50k</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <span class="tipo-tag tipo-tcc">Dissertação</span>
+              <span style="font-size:11px;color:#4338ca;font-weight:600;">88% compatível</span>
+            </div>
+          </a>
+
+          <a href="demanda.html" class="recomendado-item">
+            <div class="recomendado-left">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <div class="company-logo" style="width:20px;height:20px;font-size:8px;border-radius:4px;">PB</div>
+                <span style="font-size:12px;color:var(--muted);">Petrobras</span>
+              </div>
+              <div class="recomendado-title">Classificação automática de imagens sísmicas com redes convolucionais</div>
+              <div class="recomendado-meta">Pesquisa · 18 meses · Remoto · R$ 80k–150k</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+              <span style="font-size:11px;color:#4338ca;font-weight:600;">82% compatível</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function showView(id, btn) {
+      document.querySelectorAll('.panel-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById('view-' + id).classList.add('active');
+      if (btn) btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

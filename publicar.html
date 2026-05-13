@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publicar demanda — Nexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    .page-header { margin-bottom: 36px; }
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+    .page-header p { font-size: 15px; color: var(--muted); }
+
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* RECURSO TOGGLE */
+    .toggle-group {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .toggle-option {
+      flex: 1;
+      text-align: center;
+      padding: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: none;
+      font-family: 'Inter', sans-serif;
+      color: var(--muted);
+    }
+    .toggle-option.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    .toggle-option:not(:last-child) { border-right: 1px solid var(--border); }
+
+    .recurso-detail {
+      display: none;
+      margin-top: 16px;
+    }
+    .recurso-detail.visible { display: grid; }
+
+    /* AREAS CHECKBOXES */
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .area-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 13px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .area-check input { display: none; }
+    .area-check.selected {
+      border-color: var(--accent);
+      background: #f0f0f8;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .area-check:hover { border-color: #aaa; }
+
+    /* STEPS */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 36px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .step {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .step:last-child { border-right: none; }
+    .step.active { background: var(--accent); color: #fff; }
+    .step.done { background: #f0f0f8; color: var(--accent); }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row-2, .form-row-3 { grid-template-columns: 1fr; }
+      .area-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">nexo <span>/ empresa & academia</span></a>
+      <div class="nav-actions">
+        <a href="empresa.html" class="btn btn-ghost">← Meu perfil</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <div class="page-header">
+      <h1>Publicar nova demanda</h1>
+      <p>Descreva o projeto que sua empresa precisa. Pesquisadores e alunos receberão a demanda e poderão se candidatar.</p>
+    </div>
+
+    <!-- PROGRESSO -->
+    <div class="steps">
+      <div class="step active">1. Identificação</div>
+      <div class="step">2. Descrição</div>
+      <div class="step">3. Escopo</div>
+      <div class="step">4. Recursos</div>
+      <div class="step">5. Revisão</div>
+    </div>
+
+    <!-- SEÇÃO 1: IDENTIFICAÇÃO -->
+    <div class="form-section">
+      <div class="form-section-title">Identificação</div>
+
+      <div class="form-group">
+        <label>Título da demanda *</label>
+        <input type="text" placeholder="Ex: Desenvolvimento de modelo preditivo para manutenção de equipamentos" />
+        <span class="form-hint">Seja específico. Um bom título atrai candidatos qualificados.</span>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label>Tipo de vínculo desejado *</label>
+          <select>
+            <option value="">Selecione</option>
+            <option>Pesquisa (professor / grupo de pesquisa)</option>
+            <option>TCC (aluno de graduação)</option>
+            <option>Estágio (aluno de graduação)</option>
+            <option>Dissertação (mestrando)</option>
+            <option>Tese (doutorando)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Modalidade *</label>
+          <select>
+            <option value="">Selecione</option>
+            <option>Remoto</option>
+            <option>Presencial</option>
+            <option>Híbrido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row-3">
+        <div class="form-group">
+          <label>Duração estimada *</label>
+          <select>
+            <option value="">Selecione</option>
+            <option>Até 3 meses</option>
+            <option>3 a 6 meses</option>
+            <option>6 a 12 meses</option>
+            <option>12 a 24 meses</option>
+            <option>Mais de 24 meses</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Prazo para candidaturas *</label>
+          <input type="date" />
+        </div>
+        <div class="form-group">
+          <label>Número de vagas *</label>
+          <select>
+            <option>1</option>
+            <option>2</option>
+            <option>3 ou mais</option>
+            <option>A definir</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2: ÁREA TEMÁTICA -->
+    <div class="form-section">
+      <div class="form-section-title">Área temática</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Selecione todas que se aplicam.</p>
+      <div class="area-grid" id="area-grid">
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Inteligência Artificial</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Engenharia de Software</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Ciência de Dados</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Engenharia Mecânica</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Engenharia Elétrica</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Meio Ambiente</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Biotecnologia</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Química & Materiais</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Ciências Sociais</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Administração</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Design</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Saúde & Biomedicina</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Energia</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Agronegócio</label>
+        <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Outra</label>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 3: DESCRIÇÃO -->
+    <div class="form-section">
+      <div class="form-section-title">Descrição do projeto</div>
+
+      <div class="form-group">
+        <label>Contexto e motivação *</label>
+        <textarea placeholder="Qual problema sua empresa enfrenta? Por que este projeto é importante? Qual o contexto de negócio?" style="min-height:120px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>O que esperamos como resultado *</label>
+        <textarea placeholder="Descreva os entregáveis esperados: relatório, protótipo, artigo, código, recomendação..." style="min-height:100px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Perfil desejado *</label>
+        <textarea placeholder="Qual formação, experiência ou conhecimentos o candidato ideal deve ter?" style="min-height:80px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Dados / acesso que serão fornecidos</label>
+        <textarea placeholder="Quais dados, APIs, infraestrutura ou acesso você disponibilizará para o projeto?" style="min-height:80px;"></textarea>
+        <span class="form-hint">Projetos com dados reais disponíveis atraem candidatos mais qualificados.</span>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 4: RECURSO FINANCEIRO -->
+    <div class="form-section">
+      <div class="form-section-title">Recurso financeiro</div>
+
+      <div class="form-group">
+        <label>Há recurso financeiro disponível para este projeto? *</label>
+        <div class="toggle-group">
+          <button class="toggle-option active" onclick="toggleRecurso(this, true)">Sim, há recurso</button>
+          <button class="toggle-option" onclick="toggleRecurso(this, false)">Sem recurso direto</button>
+          <button class="toggle-option" onclick="toggleRecurso(this, null)">A definir / negociar</button>
+        </div>
+      </div>
+
+      <div class="recurso-detail visible form-row-2" id="recurso-detail">
+        <div class="form-group" style="margin-bottom:0">
+          <label>Faixa de investimento estimado</label>
+          <select>
+            <option value="">Selecione</option>
+            <option>Até R$ 10.000</option>
+            <option>R$ 10k – R$ 30k</option>
+            <option>R$ 30k – R$ 80k</option>
+            <option>R$ 80k – R$ 200k</option>
+            <option>Acima de R$ 200k</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>Tipo de contrato / instrumento</label>
+          <select>
+            <option value="">Selecione</option>
+            <option>Contrato de P&D (Lei do Bem)</option>
+            <option>Convênio com universidade</option>
+            <option>Bolsa de pesquisa</option>
+            <option>Prestação de serviços</option>
+            <option>A definir</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:16px;">
+        <label>Benefícios adicionais</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Bolsa mensal</label>
+          <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Co-autoria em publicações</label>
+          <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Auxílio equipamento</label>
+          <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Visita técnica</label>
+          <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Carta de referência</label>
+          <label class="area-check" onclick="toggleArea(this)"><input type="checkbox" />Possibilidade de contratação</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="form-actions">
+      <button class="btn btn-ghost">Salvar rascunho</button>
+      <button class="btn btn-primary btn-lg">Publicar demanda →</button>
+    </div>
+
+  </div>
+
+  <footer>
+    nexo &mdash; conectando empresa e academia &mdash; 2025
+  </footer>
+
+  <script>
+    function toggleArea(el) {
+      el.classList.toggle('selected');
+    }
+
+    function toggleRecurso(btn, hasRecurso) {
+      document.querySelectorAll('.toggle-option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const detail = document.getElementById('recurso-detail');
+      if (hasRecurso === true) {
+        detail.classList.add('visible');
+      } else {
+        detail.classList.remove('visible');
+      }
+    }
+  </script>
+
+</body>
+</html>

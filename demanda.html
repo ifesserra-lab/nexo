@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demanda — Nexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* MAIN */
+    .demand-header { margin-bottom: 28px; }
+    .demand-header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      margin: 16px 0 12px;
+    }
+    .demand-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .meta-icon { font-size: 14px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .body-text {
+      font-size: 15px;
+      color: #222;
+      line-height: 1.75;
+    }
+    .body-text p + p { margin-top: 14px; }
+
+    .section-block { margin-bottom: 36px; }
+
+    .deliverable-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .deliverable-list li {
+      font-size: 14px;
+      color: #222;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .deliverable-list li::before {
+      content: "→";
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .sidebar-card h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row .label { color: var(--muted); }
+    .info-row .value { font-weight: 500; }
+
+    .recurso-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      background: #F0FDF4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+    .recurso-badge.sem-recurso {
+      background: #FFF7ED;
+      color: #c2410c;
+      border-color: #fed7aa;
+    }
+
+    /* COMPANY INFO */
+    .company-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .company-info-text .name { font-size: 15px; font-weight: 600; }
+    .company-info-text .sector { font-size: 13px; color: var(--muted); }
+
+    /* CANDIDATURA FORM */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .form-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: -0.2px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* CANDIDATOS */
+    .candidatos-list { display: flex; flex-direction: column; gap: 8px; }
+    .candidato-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+    }
+    .candidato-left { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .candidato-name { font-weight: 500; }
+    .candidato-vinculo { color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">nexo <span>/ empresa & academia</span></a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-ghost">← Demandas</a>
+        <a href="entrar.html" class="btn btn-primary">Entrar</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="layout">
+
+    <!-- MAIN CONTENT -->
+    <div>
+      <div class="demand-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+          <span class="status-badge status-aberta"><span class="status-dot"></span>Aberta</span>
+        </div>
+
+        <h1>Otimização de algoritmos preditivos para manutenção de equipamentos industriais</h1>
+
+        <div class="demand-meta-row">
+          <span class="meta-item"><span class="meta-icon">🏢</span> Petrobras</span>
+          <span class="meta-item"><span class="meta-icon">📅</span> Prazo: 12 meses</span>
+          <span class="meta-item"><span class="meta-icon">📍</span> Remoto</span>
+          <span class="meta-item"><span class="meta-icon">👥</span> 7 candidatos</span>
+          <span class="meta-item"><span class="meta-icon">🕐</span> Publicado há 3 dias</span>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- DESCRIÇÃO -->
+      <div class="section-block">
+        <div class="section-label">Descrição</div>
+        <div class="body-text">
+          <p>A Petrobras busca parceiro acadêmico para desenvolver modelos de machine learning capazes de prever falhas em compressores com base em séries temporais coletadas por sensores IoT instalados em campo, em plataformas offshore e refinarias.</p>
+          <p>O projeto visa reduzir paradas não programadas, aumentar a vida útil dos equipamentos e gerar economia operacional. Os dados históricos de falhas e sensores dos últimos 5 anos serão disponibilizados mediante acordo de confidencialidade.</p>
+          <p>Esperamos publicação conjunta em periódico qualificado ao final do projeto. A pesquisa poderá originar pedido de patente.</p>
+        </div>
+      </div>
+
+      <!-- ESCOPO -->
+      <div class="section-block">
+        <div class="section-label">Escopo do projeto</div>
+        <ul class="deliverable-list">
+          <li>Análise exploratória e limpeza dos dados de sensores fornecidos</li>
+          <li>Desenvolvimento e comparação de modelos preditivos (LSTM, XGBoost, Transformer)</li>
+          <li>Validação em ambiente controlado com dados de holdout</li>
+          <li>Relatório técnico intermediário (mês 6) e final (mês 12)</li>
+          <li>Artigo científico submetido a periódico Qualis A1/A2</li>
+          <li>Documentação e entrega do código-fonte comentado</li>
+        </ul>
+      </div>
+
+      <!-- ÁREA TEMÁTICA -->
+      <div class="section-block">
+        <div class="section-label">Áreas temáticas</div>
+        <div class="tag-list">
+          <span class="tag">Machine Learning</span>
+          <span class="tag">IoT & Sensores</span>
+          <span class="tag">Engenharia de Produção</span>
+          <span class="tag">Séries Temporais</span>
+          <span class="tag">Python</span>
+          <span class="tag">Manutenção Preditiva</span>
+        </div>
+      </div>
+
+      <!-- PERFIL DESEJADO -->
+      <div class="section-block">
+        <div class="section-label">Perfil desejado</div>
+        <div class="body-text">
+          <p>Pesquisador com experiência em aprendizado de máquina aplicado a dados industriais. Desejável conhecimento em processamento de séries temporais e experiência com ambientes de produção. Grupo de pesquisa ou laboratório com estrutura para orientar doutorandos ou mestrandos na execução.</p>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- CANDIDATURA FORM -->
+      <div class="form-card" id="candidatura">
+        <h3>Candidatar-se a esta demanda</h3>
+        <div class="form-group">
+          <label>Nome completo</label>
+          <input type="text" placeholder="Seu nome" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>E-mail institucional</label>
+            <input type="email" placeholder="nome@universidade.edu.br" />
+          </div>
+          <div class="form-group">
+            <label>Vínculo</label>
+            <select>
+              <option value="">Selecione</option>
+              <option>Graduando</option>
+              <option>Mestrando</option>
+              <option>Doutorando</option>
+              <option>Professor / Pesquisador</option>
+              <option>Pós-doc</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Instituição</label>
+            <input type="text" placeholder="Universidade" />
+          </div>
+          <div class="form-group">
+            <label>Currículo Lattes / LinkedIn</label>
+            <input type="url" placeholder="https://" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Proposta de abordagem</label>
+          <textarea placeholder="Descreva como você abordaria este projeto, sua experiência relevante e por que sua candidatura é adequada..." style="min-height:140px;"></textarea>
+          <span class="form-hint">Seja específico. Empresas valorizam candidatos que demonstram domínio do problema.</span>
+        </div>
+        <div class="form-group">
+          <label>Link para portfólio / publicações (opcional)</label>
+          <input type="url" placeholder="https://" />
+        </div>
+        <button class="btn btn-primary btn-lg btn-full">Enviar candidatura</button>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- EMPRESA -->
+      <div class="sidebar-card">
+        <h3>Empresa</h3>
+        <div class="company-info">
+          <div class="company-logo company-logo-lg">PB</div>
+          <div class="company-info-text">
+            <div class="name">Petrobras</div>
+            <div class="sector">Energia & Petroquímica</div>
+          </div>
+        </div>
+        <a href="empresa.html" class="btn btn-ghost btn-full" style="font-size:13px;">Ver perfil da empresa</a>
+      </div>
+
+      <!-- DETALHES -->
+      <div class="sidebar-card">
+        <h3>Detalhes</h3>
+        <div class="info-row">
+          <span class="label">Tipo</span>
+          <span class="tipo-tag tipo-pesquisa">Pesquisa</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Duração</span>
+          <span class="value">12 meses</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Modalidade</span>
+          <span class="value">Remoto</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Vagas</span>
+          <span class="value">1 grupo / laboratório</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Prazo candidatura</span>
+          <span class="value">30 jun 2025</span>
+        </div>
+      </div>
+
+      <!-- RECURSO FINANCEIRO -->
+      <div class="sidebar-card">
+        <h3>Recurso financeiro</h3>
+        <div class="recurso-badge" style="margin-bottom:12px;">
+          ✓ Disponível
+        </div>
+        <div class="info-row">
+          <span class="label">Faixa estimada</span>
+          <span class="value">R$ 50k – 120k</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Tipo</span>
+          <span class="value">Contrato de P&D</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Bolsas inclusas</span>
+          <span class="value">Sim (2 bolsas)</span>
+        </div>
+        <p style="font-size:12px; color:var(--muted); margin-top:12px;">Valores e condições detalhadas serão negociados após seleção.</p>
+      </div>
+
+      <!-- CANDIDATOS RECENTES -->
+      <div class="sidebar-card">
+        <h3>Candidatos recentes</h3>
+        <div class="candidatos-list">
+          <div class="candidato-item">
+            <div class="candidato-left">
+              <div class="avatar">MS</div>
+              <div>
+                <div class="candidato-name">Maria Silva</div>
+                <div class="candidato-vinculo">Doutoranda · USP</div>
+              </div>
+            </div>
+          </div>
+          <div class="candidato-item">
+            <div class="candidato-left">
+              <div class="avatar" style="background:#4338ca">RC</div>
+              <div>
+                <div class="candidato-name">Rafael Costa</div>
+                <div class="candidato-vinculo">Prof. Pesquisador · UNICAMP</div>
+              </div>
+            </div>
+          </div>
+          <div class="candidato-item">
+            <div class="candidato-left">
+              <div class="avatar" style="background:#16a34a">AL</div>
+              <div>
+                <div class="candidato-name">Ana Lima</div>
+                <div class="candidato-vinculo">Mestranda · UFMG</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:12px; color:var(--muted); margin-top:12px;">+4 candidatos. Visível apenas para a empresa.</p>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    nexo &mdash; conectando empresa e academia &mdash; 2025
+  </footer>
+
+</body>
+</html>

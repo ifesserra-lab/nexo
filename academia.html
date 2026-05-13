@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil Academia — Nexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .profile-hero {
+      border-bottom: 1px solid var(--border);
+      padding: 48px 0 40px;
+    }
+    .profile-hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .profile-left { display: flex; align-items: center; gap: 20px; }
+    .avatar-lg {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .profile-info h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+    .profile-info .role { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+    .profile-info .profile-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .profile-meta-item { font-size: 13px; color: var(--muted); }
+
+    .layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* CANDIDATURA ITEMS */
+    .candidatura-list { display: flex; flex-direction: column; gap: 12px; }
+    .candidatura-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s;
+    }
+    .candidatura-item:hover { border-color: #ccc; }
+    .candidatura-item-company {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .candidatura-item-title {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      margin-bottom: 6px;
+    }
+    .candidatura-item-meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 14px;
+    }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .sidebar-card h3 {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      gap: 8px;
+    }
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row .label { color: var(--muted); flex-shrink: 0; }
+    .info-row .value { font-weight: 500; text-align: right; }
+
+    .body-text {
+      font-size: 15px;
+      color: #222;
+      line-height: 1.75;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .stat-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-item .num { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; color: var(--accent); }
+    .stat-item .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">nexo <span>/ empresa & academia</span></a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-ghost">← Demandas</a>
+        <a href="#" class="btn btn-ghost">Editar perfil</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PROFILE HERO -->
+  <div class="profile-hero">
+    <div class="profile-hero-inner">
+      <div class="profile-left">
+        <div class="avatar-lg">MS</div>
+        <div class="profile-info">
+          <h1>Maria Silva</h1>
+          <div class="role">Doutoranda em Ciência da Computação · USP</div>
+          <div class="profile-meta">
+            <span class="profile-meta-item">🎓 Doutoranda</span>
+            <span class="profile-meta-item">📍 São Paulo, SP</span>
+            <span class="profile-meta-item">🔬 Machine Learning & IoT</span>
+            <span class="profile-meta-item">📄 Lattes atualizado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- MAIN -->
+    <div>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="num">4</div>
+          <div class="lbl">Candidaturas enviadas</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">1</div>
+          <div class="lbl">Projetos em andamento</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">2</div>
+          <div class="lbl">Projetos concluídos</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('candidaturas', this)">Candidaturas (4)</button>
+        <button class="tab-btn" onclick="showTab('projetos', this)">Projetos ativos (1)</button>
+        <button class="tab-btn" onclick="showTab('sobre', this)">Sobre mim</button>
+      </div>
+
+      <!-- TAB: CANDIDATURAS -->
+      <div class="tab-panel active" id="tab-candidaturas">
+        <div class="candidatura-list">
+
+          <a href="demanda.html" class="candidatura-item">
+            <div>
+              <div class="candidatura-item-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;">PB</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Petrobras</span>
+              </div>
+              <div class="candidatura-item-title">Otimização de algoritmos preditivos para manutenção de equipamentos industriais</div>
+              <div class="candidatura-item-meta">
+                <span>Pesquisa · 12 meses</span>
+                <span>Enviada: 08 maio 2025</span>
+              </div>
+            </div>
+            <div>
+              <span class="status-badge" style="background:#FFF7ED;color:#c2410c;white-space:nowrap;">
+                <span class="status-dot"></span>Em análise
+              </span>
+            </div>
+          </a>
+
+          <a href="demanda.html" class="candidatura-item">
+            <div>
+              <div class="candidatura-item-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;background:#0369a1;">TO</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Totvs</span>
+              </div>
+              <div class="candidatura-item-title">Prototipação de interface conversacional para ERP com processamento de linguagem natural</div>
+              <div class="candidatura-item-meta">
+                <span>TCC · 8 meses</span>
+                <span>Enviada: 02 maio 2025</span>
+              </div>
+            </div>
+            <div>
+              <span class="status-badge status-aberta" style="white-space:nowrap;">
+                <span class="status-dot"></span>Aceita
+              </span>
+            </div>
+          </a>
+
+          <a href="demanda.html" class="candidatura-item">
+            <div>
+              <div class="candidatura-item-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;background:#7c3aed;">NU</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Nubank</span>
+              </div>
+              <div class="candidatura-item-title">Desenvolvimento de dashboard de monitoramento para serviços de crédito</div>
+              <div class="candidatura-item-meta">
+                <span>Estágio · 12 meses</span>
+                <span>Enviada: 28 abr 2025</span>
+              </div>
+            </div>
+            <div>
+              <span class="status-badge status-fechada" style="white-space:nowrap;">
+                <span class="status-dot"></span>Não selecionada
+              </span>
+            </div>
+          </a>
+
+          <a href="demanda.html" class="candidatura-item">
+            <div>
+              <div class="candidatura-item-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;background:#b45309;">VL</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Vale</span>
+              </div>
+              <div class="candidatura-item-title">Estudo de impacto ambiental e modelos de recuperação de áreas degradadas por mineração</div>
+              <div class="candidatura-item-meta">
+                <span>Pesquisa · 24 meses</span>
+                <span>Enviada: 15 abr 2025</span>
+              </div>
+            </div>
+            <div>
+              <span class="status-badge" style="background:#FFF7ED;color:#c2410c;white-space:nowrap;">
+                <span class="status-dot"></span>Em análise
+              </span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- TAB: PROJETOS -->
+      <div class="tab-panel" id="tab-projetos">
+        <div class="candidatura-list">
+          <a href="demanda.html" class="candidatura-item">
+            <div>
+              <div class="candidatura-item-company">
+                <div class="company-logo" style="width:22px;height:22px;font-size:9px;border-radius:4px;background:#0369a1;">TO</div>
+                <span style="font-size:12px;color:var(--muted);font-weight:500;">Totvs</span>
+              </div>
+              <div class="candidatura-item-title">Prototipação de interface conversacional para ERP com processamento de linguagem natural</div>
+              <div class="candidatura-item-meta">
+                <span>TCC · 8 meses</span>
+                <span>Iniciado: 10 maio 2025</span>
+                <span>Previsão: jan 2026</span>
+              </div>
+            </div>
+            <div>
+              <span class="status-badge status-andamento" style="white-space:nowrap;">
+                <span class="status-dot"></span>Em andamento
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- TAB: SOBRE -->
+      <div class="tab-panel" id="tab-sobre">
+        <div class="body-text" style="margin-bottom:24px;">
+          <p>Doutoranda em Ciência da Computação pela USP, com foco em aprendizado de máquina aplicado a sistemas industriais e IoT. Mestre pela UNICAMP (2022). Experiência em desenvolvimento de modelos preditivos com séries temporais e dados de sensores.</p>
+        </div>
+        <div style="margin-bottom:24px;">
+          <div class="section-label" style="margin-bottom:10px;">Áreas de atuação</div>
+          <div class="tag-list">
+            <span class="tag">Machine Learning</span>
+            <span class="tag">IoT & Sensores</span>
+            <span class="tag">Séries Temporais</span>
+            <span class="tag">Deep Learning</span>
+            <span class="tag">Python</span>
+            <span class="tag">Indústria 4.0</span>
+          </div>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom:10px;">Publicações recentes</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:14px;color:#222;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);">
+              "Anomaly Detection in Industrial Sensors using Transformer Models" — IEEE IoT Journal, 2024
+            </div>
+            <div style="font-size:14px;color:#222;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);">
+              "Comparative Analysis of LSTM and XGBoost for Predictive Maintenance" — SBAI 2023
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-card">
+        <h3>Informações</h3>
+        <div class="info-row">
+          <span class="label">Vínculo</span>
+          <span class="value">Doutoranda</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Instituição</span>
+          <span class="value">USP</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Departamento</span>
+          <span class="value">Ciência da Computação</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Orientador</span>
+          <span class="value">Prof. João Souza</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Lattes</span>
+          <span class="value"><a href="#" style="color:var(--accent);">Ver currículo</a></span>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Disponibilidade</h3>
+        <div class="info-row">
+          <span class="label">Horas/semana</span>
+          <span class="value">20h</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Modalidade</span>
+          <span class="value">Remoto / Híbrido</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Início disponível</span>
+          <span class="value">Imediato</span>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Links</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="#" class="btn btn-ghost" style="font-size:13px;text-align:center;">Currículo Lattes</a>
+          <a href="#" class="btn btn-ghost" style="font-size:13px;text-align:center;">Google Scholar</a>
+          <a href="#" class="btn btn-ghost" style="font-size:13px;text-align:center;">LinkedIn</a>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    nexo &mdash; conectando empresa e academia &mdash; 2025
+  </footer>
+
+  <script>
+    function showTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

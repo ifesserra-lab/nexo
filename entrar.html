@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar — Nexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .auth-logo a {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .auth-logo a span { font-weight: 300; color: var(--muted); }
+
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    /* TYPE SELECTOR */
+    .type-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .type-btn {
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+    }
+    .type-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+    }
+    .type-btn:first-child { border-right: 1px solid var(--border); }
+
+    /* TABS login/cadastro */
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s;
+    }
+    .auth-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+
+    .auth-form { padding: 28px; }
+
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+
+    .divider-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .divider-text::before,
+    .divider-text::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .auth-footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+    /* CADASTRO EXTRA */
+    .cadastro-extra { display: none; }
+    .cadastro-extra.visible { display: block; }
+
+    .tipo-vaga-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .tipo-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      text-align: center;
+    }
+    .tipo-card.selected {
+      border-color: var(--accent);
+      background: #f0f0f8;
+    }
+    .tipo-card .tipo-icon { font-size: 20px; margin-bottom: 4px; }
+    .tipo-card .tipo-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .tipo-card .tipo-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">nexo <span>/ empresa & academia</span></a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-ghost">← Ver demandas</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-wrap">
+    <div class="auth-box">
+
+      <div class="auth-logo">
+        <a href="index.html">nexo <span>/ empresa & academia</span></a>
+      </div>
+
+      <div class="auth-card">
+
+        <!-- TIPO: empresa ou academia -->
+        <div class="type-selector">
+          <button class="type-btn active" onclick="setTipo(this, 'empresa')">🏢 Sou empresa</button>
+          <button class="type-btn" onclick="setTipo(this, 'academia')">🎓 Sou da academia</button>
+        </div>
+
+        <!-- LOGIN / CADASTRO TABS -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="setAuthTab(this, 'login')">Entrar</button>
+          <button class="auth-tab" onclick="setAuthTab(this, 'cadastro')">Criar conta</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div class="auth-form">
+          <div class="auth-panel active" id="panel-login">
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" placeholder="seu@email.com" />
+            </div>
+            <div class="form-group">
+              <label>Senha</label>
+              <input type="password" placeholder="••••••••" />
+            </div>
+            <div style="text-align:right;margin-top:-8px;margin-bottom:16px;">
+              <a href="#" style="font-size:13px;color:var(--muted);text-decoration:none;">Esqueci a senha</a>
+            </div>
+            <button class="btn btn-primary btn-full btn-lg">Entrar</button>
+          </div>
+
+          <!-- CADASTRO -->
+          <div class="auth-panel" id="panel-cadastro">
+            <div class="form-group">
+              <label id="nome-label">Nome da empresa *</label>
+              <input type="text" id="nome-input" placeholder="Razão social ou nome fantasia" />
+            </div>
+            <div class="form-group">
+              <label>E-mail *</label>
+              <input type="email" placeholder="contato@empresa.com" />
+            </div>
+            <div class="form-group">
+              <label>Senha *</label>
+              <input type="password" placeholder="Mínimo 8 caracteres" />
+            </div>
+
+            <!-- CAMPOS EXTRAS EMPRESA -->
+            <div class="cadastro-extra visible" id="extra-empresa">
+              <div class="form-group">
+                <label>CNPJ *</label>
+                <input type="text" placeholder="00.000.000/0001-00" />
+              </div>
+              <div class="form-group">
+                <label>Setor de atuação</label>
+                <select>
+                  <option value="">Selecione</option>
+                  <option>Tecnologia</option>
+                  <option>Energia</option>
+                  <option>Saúde</option>
+                  <option>Agronegócio</option>
+                  <option>Indústria</option>
+                  <option>Serviços</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- CAMPOS EXTRAS ACADEMIA -->
+            <div class="cadastro-extra" id="extra-academia">
+              <div class="form-group">
+                <label>Vínculo institucional *</label>
+                <div class="tipo-vaga-grid">
+                  <div class="tipo-card" onclick="selectVinculo(this)">
+                    <div class="tipo-icon">📚</div>
+                    <div class="tipo-name">Graduando</div>
+                    <div class="tipo-desc">Aluno de bacharelado</div>
+                  </div>
+                  <div class="tipo-card" onclick="selectVinculo(this)">
+                    <div class="tipo-icon">🔬</div>
+                    <div class="tipo-name">Pós-graduando</div>
+                    <div class="tipo-desc">Mestrado ou doutorado</div>
+                  </div>
+                  <div class="tipo-card" onclick="selectVinculo(this)">
+                    <div class="tipo-icon">🏛️</div>
+                    <div class="tipo-name">Pesquisador</div>
+                    <div class="tipo-desc">Professor ou pós-doc</div>
+                  </div>
+                  <div class="tipo-card" onclick="selectVinculo(this)">
+                    <div class="tipo-icon">🎓</div>
+                    <div class="tipo-name">Outro</div>
+                    <div class="tipo-desc">Especificar</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Instituição *</label>
+                <input type="text" placeholder="Universidade ou centro de pesquisa" />
+              </div>
+              <div class="form-group">
+                <label>Currículo Lattes</label>
+                <input type="url" placeholder="http://lattes.cnpq.br/..." />
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-full btn-lg" style="margin-top:8px;">Criar conta</button>
+
+            <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">
+              Ao criar conta, você concorda com os <a href="#" style="color:var(--accent);">Termos de Uso</a>.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="auth-footer">
+        <span id="auth-toggle-text">Não tem conta? <a href="#" onclick="setAuthTabByName('cadastro')">Criar conta</a></span>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    nexo &mdash; conectando empresa e academia &mdash; 2025
+  </footer>
+
+  <script>
+    let currentTipo = 'empresa';
+
+    function setTipo(btn, tipo) {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTipo = tipo;
+
+      document.getElementById('extra-empresa').classList.toggle('visible', tipo === 'empresa');
+      document.getElementById('extra-academia').classList.toggle('visible', tipo === 'academia');
+
+      const nomeLabel = document.getElementById('nome-label');
+      const nomeInput = document.getElementById('nome-input');
+      if (tipo === 'empresa') {
+        nomeLabel.textContent = 'Nome da empresa *';
+        nomeInput.placeholder = 'Razão social ou nome fantasia';
+      } else {
+        nomeLabel.textContent = 'Nome completo *';
+        nomeInput.placeholder = 'Seu nome';
+      }
+    }
+
+    function setAuthTab(btn, tab) {
+      document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab).classList.add('active');
+
+      const toggle = document.getElementById('auth-toggle-text');
+      if (tab === 'login') {
+        toggle.innerHTML = 'Não tem conta? <a href="#" onclick="setAuthTabByName(\'cadastro\')">Criar conta</a>';
+      } else {
+        toggle.innerHTML = 'Já tem conta? <a href="#" onclick="setAuthTabByName(\'login\')">Entrar</a>';
+      }
+    }
+
+    function setAuthTabByName(tab) {
+      const btn = document.querySelector(`.auth-tab:${tab === 'login' ? 'first-child' : 'last-child'}`);
+      setAuthTab(btn, tab);
+    }
+
+    function selectVinculo(el) {
+      document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+  </script>
+
+</body>
+</html>
